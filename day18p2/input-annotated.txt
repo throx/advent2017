@@ -1,0 +1,41 @@
+set i 31        i = 31
+set a 1         a = 1
+mul p 17        
+jgz p p         if pid == 1, goto JUMP1
+mul a 2         L1: a = a * 2
+add i -1        i = i - 1
+jgz i -2        if (i > 0), loop L1   ... a = 2^31
+add a -1        a = 2^31 - 1
+set i 127       i = 127
+set p 316       p = 316
+mul p 8505      L2: p = 2687580
+mod p a         p = p % a
+mul p 129749    p = p * 129749 + 12345
+add p 12345
+mod p a         p = p % a
+set b p         b = p % 10000
+mod b 10000
+snd b           send b
+add i -1        i = i - 1
+jgz i -9        if (i > 0) loop L2  (so, 127 times)
+jgz a 3         JUMP1: if (a > 0), go L3
+rcv b           L4: recv b
+jgz b -1        if (b > 0) loop L4   (read all until 0)
+set f 0         L3: f = 0
+set i 126
+rcv a
+rcv b
+set p a
+mul p -1
+add p b
+jgz p 4
+snd a
+set a b
+jgz 1 3
+snd b
+set f 1
+add i -1
+jgz i -11
+snd a
+jgz f -16
+jgz a -19
